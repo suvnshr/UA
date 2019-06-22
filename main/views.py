@@ -1,34 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from . import forms as custom_forms
+from .models import Person
 
 # Create your views here.
 
-def convert(email):
-
-    i = email.index("@")
-    first = email[:i]
-    last = email[i+1:]
-    f = str(idna.encode(first))
-    f = f[2:len(f)-1]
-    s=str((idna.encode(last)))
-    s = s[2:len(s)-1]
-
-    return(f+"@"+s)
-
-def reconvert(email):
-
-    i = email.index("@")
-    first = email[:i]
-    last = email[i+1:]
-
-    f = str(idna.decode(first))
-    s = str((idna.decode(last)))
-
-    return(f+"@"+s)
-
 def index(request):
 
+    error = False
+    p = None
     form = custom_forms.RegisterForm()
 
     if request.method == "POST":
@@ -36,15 +16,32 @@ def index(request):
 
         if form.is_valid():
 
-            return render(request, "main/home.html", {
-                'name': form.cleaned_data['name'],
-                'email': form.cleaned_data['email'],
-            })
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            try:
+                p = Person.objects.create(
+                    name=name,
+                    email=email,
+                    password=password
+                )
+
+                p.save()
+
+            except:
+                error = True
+
+            if not error:
+                return render(request, "main/home.html", {
+                    'person': p,
+                })
         
         else:
             return HttpResponse("Error")
 
     return render(request, "main/index.html", {
-        'form': form
+        'form': form,
+        'error': error,
     })
 
