@@ -14,47 +14,66 @@ class Person(models.Model):
         return self.name
 
     def get_email(self):
-        i = self.email.index("@")
 
-        first = self.email[:i]
-        last = self.email[i + 1 :]
+         # spliting the email into parts
+        email_parts = self.email.split("@")
 
-        f = str(idna.decode(first))
-        s = str((idna.decode(last)))
+        # decoding the email parts
+        decoded_parts = tuple(
+            map(
+                idna.decode, email_parts
+            )
+        )
 
-        return f + "@" + s
+        # Joining the decoded email parts with "@" as the glue
+        decoded_email = "@".join(decoded_parts)
 
-    def is_valid_email(self, email):
+        return decoded_email
 
-        parts = self.email.split("@")
+    @staticmethod
+    def is_valid_email(email):
+
+        parts = email.split("@")
 
         if len(parts) == 2 and all(parts):
 
             second_part = parts[1]
-
             pieces = second_part.split(".")
 
             if len(pieces) >= 2 and all(pieces):
-
                 return True
 
     def save(self, *args, **kwargs):
 
-        i = self.email.index("@")
-        first = self.email[:i]
-        last = self.email[i + 1 :]
+        email = self.email
 
-        f = str(idna.encode(first))
-        f = f[2 : len(f) - 1]
-        s = str((idna.encode(last)))
-        s = s[2 : len(s) - 1]   
+        if Person.is_valid_email(email):
 
-        
-        new_email = f + "@" + s
+            # spliting the email into parts
+            email_parts = email.split("@")
 
-        if self.is_valid_email(new_email):
-            self.email = new_email
+            # encoding the email parts
+            encoded_parts = tuple(
+                map(
+                    # `bytes_object.decode("utf-8")` is used to convert
+                    # bytes object to string object
+
+                    lambda string: idna.encode(string).decode("utf-8"),
+                    email_parts
+                )
+            )
+
+            print(encoded_parts)
+
+            # Joining the encoded email parts with "@" as the glue
+            encoded_email = "@".join(encoded_parts)
+
+            # replacing the old email(not encoded)
+            # with new email(encoded)
+            self.email = encoded_email
+
+            # saving
             return super().save(*args, **kwargs)
-        else:
-            raise ValueError
 
+        # Raising error as the email is not valid
+        raise ValueError("Invalid e-mail provided")

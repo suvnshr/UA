@@ -8,11 +8,11 @@ from .models import Person
 
 def index(request):
 
-    error = False
-    p = None
     form = custom_forms.RegisterForm()
+    is_email_valid = True
 
     if request.method == "POST":
+
         form = custom_forms.RegisterForm(request.POST)
 
         if form.is_valid():
@@ -22,17 +22,24 @@ def index(request):
             password = form.cleaned_data["password"]
 
             try:
-                p = Person.objects.create(name=name, email=email, password=password)
-                p.save()
+                person = Person.objects.create(
+                    name=name,
+                    email=email,
+                    password=password,
+                )
+
+                person.save()
+
+
+                return render(request, "main/home.html", {
+                    "person": person
+                })
 
             except ValueError:
-                error = True
-
-            if not error:
-                return render(request, "main/home.html", {"person": p})
+                return HttpResponse("Value Error !!")
+                is_email_valid = False
 
         else:
-            return HttpResponse("Error")
+            return HttpResponse("Enter valid values in the form.")
 
-    return render(request, "main/index.html", {"form": form, "error": error})
-
+    return render(request, "main/index.html", {"form": form, "is_email_valid": is_email_valid})
