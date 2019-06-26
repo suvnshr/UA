@@ -63,8 +63,6 @@ class Person(models.Model):
                 )
             )
 
-            print(encoded_parts)
-
             # Joining the encoded email parts with "@" as the glue
             encoded_email = "@".join(encoded_parts)
 
