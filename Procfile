@@ -1,1 +1,1 @@
-web: gunicorn Farmer.wsgi
+web: gunicorn UA.wsgi
