@@ -30,16 +30,17 @@ def index(request):
 
                 person.save()
 
-
                 return render(request, "main/home.html", {
                     "person": person
                 })
 
             except ValueError:
-                return HttpResponse("Value Error !!")
                 is_email_valid = False
 
         else:
-            return HttpResponse("Enter valid values in the form.")
+           is_email_valid = False
 
-    return render(request, "main/index.html", {"form": form, "is_email_valid": is_email_valid})
+    return render(request, "main/index.html", {
+        "form": form,
+        "is_email_valid": is_email_valid,
+    })

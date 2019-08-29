@@ -8,5 +8,9 @@ class RegisterForm(forms.Form):
         }
     ))
     name = forms.CharField()
-    password = forms.CharField()
+    password = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'type': 'password'
+        }
+    ))
 
