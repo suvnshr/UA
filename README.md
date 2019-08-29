@@ -3,9 +3,7 @@ Simple django app for unicode encoding and decoding of local languages.
 
 ## Installation
 
-`pip install django`
-
-`pip install idna`
+`pip install -r requirements.txt`
 
 
 ## Approach
