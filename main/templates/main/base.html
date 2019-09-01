@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> {% block title %} Welcome {% endblock title %} - UA</title>
+    <link async rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link async rel="stylesheet" href="{% static 'main/index.css' %}">
+
+    <meta name="description" content="An application that accepts, validate, process and store data provided by the user, data can be in any vernacular language." />
+    <meta name="theme-color" content="#2E7D32" />
+
+</head>
+<body>
+
+    <header>
+        <nav class="green darken-3" >
+            <div class="nav-wrapper center-align">
+                <a href="#" class="brand-logo">UA</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block main %}{% endblock main %}
+    </main>
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+/* Changed due to problem in contrast  */
+label:not(.active) {
+    color: #555;
+}
